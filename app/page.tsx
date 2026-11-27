@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { loveConfig } from "../src/config/love-config";
+import "./promises.css";
 
 const heart = "♥";
 const openWhen = [
@@ -28,6 +29,7 @@ export default function Home() {
   const [game, setGame] = useState({ level: 1, score: 0, active: false });
   const [lightbox, setLightbox] = useState<number | null>(null);
   const [reply, setReply] = useState<string | null>(null);
+  const [activePromise, setActivePromise] = useState<number | null>(null);
   const audio = useRef<HTMLAudioElement>(null);
   const discovered = useMemo(() => new Set(revealed).size, [revealed]);
 
@@ -69,7 +71,7 @@ export default function Home() {
 
       <section className="chapter stars"><p className="eyebrow">chapter nine</p><div className="constellation">{Array.from({length: 35},(_,i)=><i key={i} style={{left:`${(i*37)%96}%`,top:`${(i*53)%88}%`,animationDelay:`${i*.1}s`}}>✦</i>)}<b>♥</b></div><h2>Look at the stars</h2><p>If every star represented one thing I love about you, even the universe wouldn’t have enough stars.</p></section>
 
-      <section className="chapter promises"><p className="eyebrow">chapter ten</p><h2>My promises to you</h2><div>{loveConfig.promises.map((promise, i) => <article key={promise}><b>{String(i+1).padStart(2,"0")}</b>{promise}</article>)}</div></section>
+      <section id="promises" className="chapter promises"><p className="eyebrow">chapter ten</p><h2>My promises to you</h2><p className="section-intro">Swipe through these, or tap a card to bring a promise close.</p><div className="promise-track" aria-label="My promises">{loveConfig.promises.map((promise, i) => <button className={`promise-card ${activePromise === i ? "active" : ""}`} key={promise} onClick={() => setActivePromise(activePromise === i ? null : i)} aria-pressed={activePromise === i}><b>{String(i+1).padStart(2,"0")}</b><span>{promise}</span><small>{activePromise === i ? "A promise I want to live by ♥" : "Tap to hold this promise"}</small></button>)}</div></section>
 
       <section className="chapter voice"><p className="eyebrow">chapter eleven</p><h2>Listen to my heart</h2><p>Some feelings are better spoken than written.</p><div className="wave">{Array.from({length:28},(_,i)=><i key={i} style={{height:`${15+(i*17)%60}%`}}/>)}</div><button className="primary" onClick={() => setSound(!sound)}>{sound ? "Pause O Sanam" : "Play O Sanam"}</button></section>
 
